@@ -1,0 +1,320 @@
+1.Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent,
+with the colors in the order red, white, and blue.
+We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+You must solve this problem without using the library's sort function.
+#CODE:
+class Solution:
+    def sortColors(self, l: List[int]) -> None:
+        n=len(l)
+        for i in range(n-1):
+            for j in range(i+1,n):
+                if(l[i]>l[j]):
+                    l[i],l[j]=l[j],l[i]
+
+2.A sentence is a list of words that are separated by a single space with no leading or trailing spaces. Each word consists of lowercase and uppercase English letters.
+A sentence can be shuffled by appending the 1-indexed word position to each word then rearranging the words in the sentence.
+For example, the sentence "This is a sentence" can be shuffled as "sentence4 a3 is2 This1" or "is2 sentence4 This1 a3".
+Given a shuffled sentence s containing no more than 9 words, reconstruct and return the original sentence.
+#CODE:
+class Solution:
+    def sortSentence(self, s: str) -> str:
+        x = s.split()
+        dic = {}
+        for i in x :
+            dic[i[-1]] = i[:-1]
+        return ' '.join([dic[j] for j in sorted(dic)])
+
+3.You are given a 0-indexed integer array nums of even length and there is also an empty array arr.
+Alice and Bob decided to play a game where in every round Alice and Bob will do one move. The rules of the game are as follows:
+Every round, first Alice will remove the minimum element from nums, and then Bob does the same.
+Now, first Bob will append the removed element in the array arr, and then Alice does the same.
+The game continues until nums becomes empty.
+Return the resulting array arr.
+ #CODE
+class Solution:
+    def numberGame(self, nums: List[int]) -> List[int]:
+        nums.sort()
+        i=0
+        while(i<len(nums)):
+         nums[i],nums[i+1]=nums[i+1],nums[i]
+            i+=2
+        return nums 
+
+4.You are given an array of unique integers salary where salary[i] is the salary of the ith employee.
+Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.
+#CODE:
+class Solution:
+    def average(self, salary: List[int]) -> float:
+        salary.sort()
+        return (sum(salary)-salary[0]-salary[-1])/(len(salary)-2)    
+
+5.You are given a 0-indexed integer array nums. Rearrange the values of nums according to the following rules:
+Sort the values at odd indices of nums in non-increasing order.
+For example, if nums = [4,1,2,3] before this step, it becomes [4,3,2,1] after. The values at odd indices 1 and 3 are sorted in non-increasing order.
+Sort the values at even indices of nums in non-decreasing order.
+For example, if nums = [4,1,2,3] before this step, it becomes [2,1,4,3] after. The values at even indices 0 and 2 are sorted in non-decreasing order.
+Return the array formed after rearranging the values of nums.
+#CODE:
+class Solution:
+    def sortEvenOdd(self, nums: List[int]) -> List[int]:
+        a=[]
+        b=[]
+        for i in range(0,len(nums),2):
+            a.append(nums[i])
+        for j in range(1,len(nums),2):
+            b.append(nums[j])
+        a.sort()
+        b.sort()
+        b.reverse()
+        r=[]
+        for p,q in zip(a,b):
+            r+=[p,q]
+        if len(a)>len(b):
+            r.extend(a[len(b):])
+        elif len(a)<len(b):
+            r,extend(b[len(a):])
+        return r
+
+6.You are given an m x n binary matrix mat of 1's (representing soldiers) and 0's (representing civilians). 
+The soldiers are positioned in front of the civilians. That is, all the 1's will appear to the left of all the 0's in each row.
+A row i is weaker than a row j if one of the following is true:
+The number of soldiers in row i is less than the number of soldiers in row j.
+Both rows have the same number of soldiers and i < j.
+Return the indices of the k weakest rows in the matrix ordered from weakest to strongest.
+#CODE:
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        ans=[]
+        n=len(mat)
+        for i in range(n):
+            ans.append([mat[i].count(1),i])
+        ans.sort()    
+        return [i[1] for i in ans[:k]]
+
+7.Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.
+#CODE:
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        for i in range(len(nums)):
+            nums[i]=nums[i]*nums[i]
+        nums.sort()
+        return nums   
+
+8.A school is trying to take an annual photo of all the students. The students are asked to stand in a single file line in non-decreasing order by height.
+Let this ordering be represented by the integer array expected where expected[i] is the expected height of the ith student in line.
+You are given an integer array heights representing the current order that the students are standing in. Each heights[i] is the height of the ith student in line (0-indexed).
+Return the number of indices where heights[i] != expected[i].
+#CODE:
+ class Solution:
+    def heightChecker(self, heights: List[int]) -> int:
+        expected = sorted(heights)
+        ans = 0
+        for i in range(len(expected)):
+            if heights[i] != expected[i]:
+                ans += 1
+        return ans
+
+9.You are given an integer array score of size n, where score[i] is the score of the ith athlete in a competition. All the scores are guaranteed to be unique.
+The athletes are placed based on their scores, where the 1st place athlete has the highest score, 
+the 2nd place athlete has the 2nd highest score, and so on. The placement of each athlete determines their rank:
+The 1st place athlete's rank is "Gold Medal".
+The 2nd place athlete's rank is "Silver Medal".
+The 3rd place athlete's rank is "Bronze Medal".
+For the 4th place to the nth place athlete, their rank is their placement number (i.e., the xth place athlete's rank is "x").
+Return an array answer of size n where answer[i] is the rank of the ith athlete.
+#CODE:
+class Solution:
+    def findRelativeRanks(self, score: List[int]) -> List[str]:
+        heap = [] # to store score and their indices
+        res = ['']*len(score)
+        position = 0
+        for i in range(len(score)):
+            heapq.heappush(heap, (-score[i],i))
+        while position < len(score):
+            index = heapq.heappop(heap)[1] 
+            if position == 0:
+                res[index] = 'Gold Medal'
+            elif position == 1:
+                res[index] = 'Silver Medal'
+            elif position == 2:
+                res[index] = 'Bronze Medal'
+            else:
+                res[index] = str(position+1)
+            position += 1
+        return res
+
+10.[Find Target Indices After Sorting Array]
+#CODEl
+def find_target_indices(nums, target):
+    sorted_nums = sorted(nums)
+    target_indices = []
+    for i, num in enumerate(sorted_nums):
+        if num == target:
+            target_indices.append(i)
+    return target_indices
+nums = [1, 2, 5, 2, 3]
+target = 2
+result = find_target_indices(nums, target)
+print(result)
+
+11.You are given an array nums of non-negative integers. nums is considered special if there exists 
+a number x such that there are exactly x numbers in nums that are greater than or equal to x.
+Notice that x does not have to be an element in nums.
+Return x if the array is special, otherwise, return -1. It can be proven that if nums is special, the value for x is unique.
+#CODE:
+class Solution:
+    def specialArray(self, nums: List[int]) -> int:
+        count = Counter(nums)
+        total_so_far = 0
+        for i in range(max(nums),-1,-1):
+            total_so_far += count[i]
+            if total_so_far==i:
+                return i
+        return -1
+
+12.You are given an integer array prices representing the prices of various chocolates in a store.
+You are also given a single integer money, which represents your initial amount of money.
+You must buy exactly two chocolates in such a way that you still have some non-negative leftover money.
+You would like to minimize the sum of the prices of the two chocolates you buy.
+Return the amount of money you will have leftover after buying the two chocolates.
+If there is no way for you to buy two chocolates without ending up in debt, return money. Note that the leftover must be non-negative.
+#CODE:
+class Solution:
+    def buyChoco(self, prices: List[int], money: int) -> int:
+        """
+        Buy exactly two the cheapest chocolates with given prices or don't spend
+        the money if you over the budget.
+        Args:
+            prices (List[int]): List of prices for chocolates.
+            money (int): The amount of money available for spending.
+        Returns:
+            int: The remaining money after purchasing chocolates.
+        Algorithm:
+            This function iterates through the list of chocolate prices,
+            keeping track of the two smallest prices encountered.
+            It then calculates the total cost of purchasing these two chocolates.
+            Finally, it returns the remaining money after the purchase, or the
+            available money if the total cost exceeds the budget.
+
+        Time Complexity:
+            O(n), where n is the number of elements in the prices list.
+        Space Complexity:
+            O(1), due to the constant number of 'int' variables.
+        """
+        second_smallest, smallest = float("inf"), float("inf")
+        for price in prices:
+            if price < smallest:
+                second_smallest = smallest
+                smallest = price
+            elif price < second_smallest:
+                second_smallest = price
+        total_cost = second_smallest + smallest
+        return money - total_cost if total_cost <= money else money
+
+13.Given the array nums, for each nums[i] find out how many numbers in the array are smaller than it. 
+That is, for each nums[i] you have to count the number of valid j's such that j != i and nums[j] < nums[i].
+Return the answer in an array.
+#CODE:
+ Class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        a = []
+        for i in nums:
+            a.append(len([x for x in nums if x < i]))
+        return a
+
+14.Given an array of integers nums, sort the array in increasing order based on the frequency of the values.
+If multiple values have the same frequency, sort them in decreasing order.
+Return the sorted array.
+#CODE:
+class Solution:
+    def frequencySort(self, nums: List[int]) -> List[int]:
+        counts = Counter(sorted(nums)).most_common()[::-1]
+        res = []
+        for v, c in counts :
+            res.extend([v for i in range(c)])
+        return res
+
+15.You have a set of integers s, which originally contains all the numbers from 1 to n. Unfortunately,
+due to some error, one of the numbers in s got duplicated to another number in the set, which results in repetition of one number and loss of another number.
+You are given an integer array nums representing the data status of this set after the error.
+Find the number that occurs twice and the number that is missing and return them in the form of an array.
+#CODE:
+class Solution:
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        x, y = 0, 0
+        tmp = 0
+        n = len(nums)
+        expected_sum = n * (n + 1) // 2
+        s = set()
+        for i in nums:
+            if i in s:
+                y = i
+            else:
+                s.add(i)
+                tmp += i
+        x = expected_sum - tmp
+        return [y, x]
+
+16.Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
+#CODE:
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(len(nums)):
+            temp = abs(nums[i]) - 1
+            if nums[temp] > 0:
+                nums[temp] *= -1
+        res = []
+        for i,n in enumerate(nums):
+            if n > 0:
+                res.append(i+1)
+        return res
+
+17.Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
+There is only one repeated number in nums, return this repeated number.
+You must solve the problem without modifying the array nums and uses only constant extra space.
+#CODE:
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        nums.sort()
+        s,e = 0,len(nums)-1
+        m = s + (e-s)//2
+        while(s<=e):
+            if(nums[s]==nums[m]):
+                break
+            if(nums[m]-nums[s]<(m-s)):
+                e = m
+            elif(nums[m]-nums[s]>=(m-s)):
+                s = m
+            m = s+(e-s)//2
+        return nums[m] 
+
+18.Given an integer array nums of length n where all the integers of nums are in the range [1, n] and each integer
+appears once or twice, return an array of all the integers that appears twice.
+You must write an algorithm that runs in O(n) time and uses only constant extra space.
+#CODE:
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        ans =[]
+        n=len(nums)
+        for x in nums:
+            x = abs(x)
+            if nums[x-1]<0:
+                ans.append(x)
+            nums[x-1] *= -1
+        return ans
+
+19.Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+#CODE:
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        size = len(nums)
+        sum = 0
+        for i in range(size):
+            sum += nums[i]
+        return int((size * (1 + size))/2 - sum)
+ 
+        
+
+
+ 
+
